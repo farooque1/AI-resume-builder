@@ -1,0 +1,308 @@
+@import "tailwindcss";
+
+
+/* ================================
+   GLOBAL
+================================ */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* ================================
+   RESUME PREVIEW AREA
+================================ */
+
+.resume-preview-container {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 32px 16px;
+
+  background-color: #f3f4f6;
+
+  box-sizing: border-box;
+}
+
+
+/* ================================
+   PAGINATED RESUME
+================================ */
+
+.paginated-resume {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+}
+
+
+/* ================================
+   A4 PAGE
+================================ */
+
+.a4-page {
+  width: 210mm;
+  min-height: 297mm;
+
+  padding: 12mm 15mm;
+  margin: 0 auto;
+
+  box-sizing: border-box;
+
+  background: white;
+
+  /* IMPORTANT */
+  overflow: visible;
+}
+
+.resume-global-appearance * {
+  font-family: var(--resume-font-family) !important;
+}
+
+.resume-global-appearance {
+  --text-xs: calc(0.75rem * var(--resume-font-scale, 1));
+  --text-sm: calc(0.875rem * var(--resume-font-scale, 1));
+  --text-base: calc(1rem * var(--resume-font-scale, 1));
+  --text-lg: calc(1.125rem * var(--resume-font-scale, 1));
+  --text-xl: calc(1.25rem * var(--resume-font-scale, 1));
+  --text-2xl: calc(1.5rem * var(--resume-font-scale, 1));
+  --text-3xl: calc(1.875rem * var(--resume-font-scale, 1));
+  --text-4xl: calc(2.25rem * var(--resume-font-scale, 1));
+  --text-5xl: calc(3rem * var(--resume-font-scale, 1));
+  --text-6xl: calc(3.75rem * var(--resume-font-scale, 1));
+  --text-7xl: calc(4.5rem * var(--resume-font-scale, 1));
+  --text-8xl: calc(6rem * var(--resume-font-scale, 1));
+  --text-9xl: calc(8rem * var(--resume-font-scale, 1));
+}
+
+.resume-global-appearance [class~="text-[10px]"] {
+  font-size: calc(10px * var(--resume-font-scale, 1)) !important;
+}
+
+.resume-global-appearance [class~="text-[12px]"] {
+  font-size: calc(12px * var(--resume-font-scale, 1)) !important;
+}
+
+.resume-global-appearance [class~="text-[13px]"] {
+  font-size: calc(13px * var(--resume-font-scale, 1)) !important;
+}
+
+.resume-global-appearance [class~="text-[14px]"] {
+  font-size: calc(14px * var(--resume-font-scale, 1)) !important;
+}
+
+.resume-global-appearance [class~="text-[15px]"] {
+  font-size: calc(15px * var(--resume-font-scale, 1)) !important;
+}
+
+.resume-global-appearance [class~="text-[16px]"] {
+  font-size: calc(16px * var(--resume-font-scale, 1)) !important;
+}
+
+.resume-global-appearance [class~="text-[18px]"] {
+  font-size: calc(18px * var(--resume-font-scale, 1)) !important;
+}
+
+.resume-global-appearance h1,
+.resume-global-appearance h2,
+.resume-global-appearance h3 {
+  font-family: var(--resume-heading-font-family) !important;
+}
+
+.page-break-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(210mm, 100%);
+  margin: 16px auto;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page-break-divider::before,
+.page-break-divider::after {
+  flex: 1;
+  border-top: 1px dashed #94a3b8;
+  content: "";
+}
+
+.a4-page-content {
+  width: 100%;
+
+  /* IMPORTANT */
+  height: auto;
+  overflow: visible;
+}
+
+.resume-page-item {
+  display: flow-root;
+  width: 100%;
+}
+
+
+/* Content area inside A4 */
+
+/* .a4-page-content {
+  width: 100%;
+  height: 270mm;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+} */
+
+
+/* Page number */
+
+/* .a4-page-number {
+  position: absolute;
+
+  bottom: 6mm;
+  left: 0;
+
+  width: 100%;
+
+  text-align: center;
+
+  font-size: 11px;
+  line-height: 1;
+
+  color: #6b7280;
+} */
+
+
+/* ================================
+   MEASUREMENT CONTAINER
+================================ */
+
+/*
+  PaginatedResume renders another hidden
+  version of the resume here so it can
+  calculate element heights.
+*/
+
+/* .resume-measurement {
+  position: fixed;
+
+  top: 0;
+  left: -10000px;
+
+  width: 180mm;
+
+  visibility: hidden;
+
+  pointer-events: none;
+
+  box-sizing: border-box;
+}
+
+
+.resume-measurement-item,
+.resume-page-item {
+  width: 100%;
+
+  box-sizing: border-box;
+} */
+
+
+/* ================================
+   PRINT / PDF
+================================ */
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+
+@media print {
+
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background-color: white !important;
+  }
+
+
+  button {
+    display: none !important;
+  }
+
+  .page-break-divider {
+    display: none !important;
+  }
+
+
+  /* .resume-preview-container {
+    width: 210mm;
+
+    min-height: auto;
+
+    margin: 0;
+    padding: 0;
+
+    background-color: white;
+  }
+
+
+  .paginated-resume {
+    margin: 0;
+    padding: 0;
+  } */
+
+
+  /* .a4-page {
+    width: 210mm;
+    height: 297mm;
+
+    margin: 0;
+
+    box-shadow: none;
+
+    break-after: page;
+    page-break-after: always;
+  }
+
+
+  .a4-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  } */
+
+
+  /* We don't want measurement DOM in PDF */
+
+  .resume-measurement {
+    display: none !important;
+  }
+}
+
+/* .resume-preview-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 32px 16px;
+  background-color: #f3f4f6;
+  box-sizing: border-box;
+}
+
+@media print {
+  .resume-preview-container {
+    min-height: auto;
+    padding: 0;
+    background-color: white;
+  }
+} */

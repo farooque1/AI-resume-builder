@@ -1,0 +1,104 @@
+{
+  "personalInfo": {
+    "fullName": "Rahul Sharma",
+    "email": "rahul.sharma@example.com",
+    "jobTitle": "Frontend Developer",
+    "phone": "+91 9876543210",
+    "location": "Mumbai, India",
+    "linkedin": "linkedin.com/in/rahulsharma",
+    "github": "github.com/rahulsharma",
+    "portfolio": "rahulsharma.dev"
+  },
+
+  "summary": "Frontend Developer with 4 years of experience building responsive, scalable and user-friendly web applications using React.js, Next.js, JavaScript and TypeScript.",
+
+  "skills": [
+    "React.js",
+    "Next.js",
+    "JavaScript",
+    "TypeScript",
+    "Redux",
+    "Node.js",
+    "Tailwind CSS",
+    "Git"
+  ],
+
+  "experience": [
+    {
+      "jobTitle": "Frontend Developer",
+      "company": "ABC Technologies Pvt. Ltd.",
+      "fromDate": "2022-01",
+      "toDate": "",
+      "currentCompany": true,
+      "location": "Mumbai, India",
+      "points": "Developed reusable React components.\nBuilt responsive web applications using React.js and Tailwind CSS.\nIntegrated REST APIs and improved application performance."
+    },
+    {
+      "jobTitle": "Junior Software Developer",
+      "company": "XYZ Software Solutions",
+      "fromDate": "2020-06",
+      "toDate": "2021-12",
+      "currentCompany": false,
+      "location": "Pune, India",
+      "points": "Developed frontend features using JavaScript and React.js.\nWorked with REST APIs and reusable UI components.\nCollaborated with developers to fix bugs and improve application usability."
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Bachelor of Engineering in Computer Science",
+      "institution": "Mumbai University",
+      "fromDate": "2016-06",
+      "toDate": "2020-05",
+      "location": "Mumbai, India"
+    }
+  ],
+
+  "projects": [
+    {
+      "name": "Resume Builder",
+      "technologies": "React.js, Tailwind CSS, Node.js",
+      "description": "Built a dynamic resume builder with multiple templates, live preview, JSON import and resume export features."
+    },
+    {
+      "name": "E-Commerce Application",
+      "technologies": "Next.js, TypeScript, Zustand, Tailwind CSS",
+      "description": "Developed an e-commerce application with product listing, product details, shopping cart and responsive user interface."
+    }
+  ],
+
+  "certifications": [
+    {
+      "name": "React Developer Certification",
+      "issuer": "Example Academy",
+      "year": "2025"
+    }
+  ],
+
+  "awards": [
+    {
+      "title": "Best Project Award",
+      "year": "2025"
+    }
+  ],
+
+  "languages": [
+    {
+      "language": "English"
+    },
+    {
+      "language": "Hindi"
+    }
+  ],
+
+  "visibleSections": [
+    "summary",
+    "skills",
+    "experience",
+    "education",
+    "projects",
+    "certifications",
+    "awards",
+    "languages"
+  ]
+}
