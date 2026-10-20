@@ -105,7 +105,7 @@ flowchart LR
 - **Document import:** `src/utils/convertDocumentToText.js` extracts PDF text with pdf.js and DOCX text with Mammoth in the browser. The text is posted to the sibling Node API, which calls the configured AI provider and validates its output against the resume data schema. Legacy `.doc` files are not supported; convert them to `.docx` first.
 - **Export:** `src/pages/Download.jsx` uses `react-to-print` for PDF/print, `html-to-image` for PNG, and `file-saver` for JSON.
 
-There is no server database or cross-device sync. Resume edits are written to browser local storage, but the current app starts resume state from its initial data instead of restoring `resumeData` on reload. Export resume data as JSON to keep a copy or move it between browsers; appearance settings are restored from browser storage.
+There is no server database or cross-device sync. Resume edits are saved in browser local storage and restored when the app is reopened or refreshed in the same browser. Use **Clear resume** in the builder to start over; the app asks for confirmation before replacing the saved resume with a blank one. Export resume data as JSON to keep a backup or move it between browsers. Appearance settings are also restored from browser storage.
 
 ## Project structure
 

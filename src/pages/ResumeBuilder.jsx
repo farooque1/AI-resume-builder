@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
+import { useReactToPrint } from "react-to-print";
+import { toPng } from "html-to-image";
+import { saveAs } from "file-saver";
 import { useNavigate } from "react-router-dom";
 
 import PersonalInfoForm from "../forms/PersonalInfoForm";
@@ -61,6 +64,7 @@ const sectionLabels = {
 
 function ResumeBuilder() {
   const navigate = useNavigate();
+  const resumeRef = useRef(null);
 
   const { resumeData, setResumeData, appearance, setAppearance } = useResume();
   const [selectedTemplate, setSelectedTemplate] = useState(
@@ -91,10 +95,39 @@ function ResumeBuilder() {
     "--resume-heading-font-family": appearance.headingFontFamily,
     "--resume-font-scale": appearance.fontScale,
   };
-  // Save resume automatically
-  useEffect(() => {
-    localStorage.setItem("resumeData", JSON.stringify(resumeData));
-  }, [resumeData]);
+  const fileName =
+    resumeData.personalInfo?.fullName?.trim().replace(/\s+/g, "_") || "Resume";
+  const handleDownloadPdf = useReactToPrint({
+    contentRef: resumeRef,
+    documentTitle: `${fileName}_Resume`,
+  });
+
+  const handleDownloadPng = async () => {
+    if (!resumeRef.current) return;
+
+    try {
+      const imageDataUrl = await toPng(resumeRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+        backgroundColor: "#ffffff",
+        cacheBust: true,
+      });
+      const downloadLink = document.createElement("a");
+      downloadLink.download = `${fileName}_Resume.png`;
+      downloadLink.href = imageDataUrl;
+      downloadLink.click();
+    } catch (error) {
+      console.error("PNG download failed:", error);
+    }
+  };
+
+  const handleDownloadJson = () => {
+    const jsonBlob = new Blob([JSON.stringify(resumeData, null, 2)], {
+      type: "application/json;charset=utf-8",
+    });
+    saveAs(jsonBlob, `${fileName}_Resume.json`);
+  };
+
   // Toggle section
   const toggleSection = (section) => {
     setResumeData((prev) => {
@@ -124,8 +157,15 @@ function ResumeBuilder() {
   };
   // Clear resume
   const handleClearResume = () => {
-    localStorage.removeItem("resumeData");
-    setResumeData(initialResumeData);
+    const confirmed = window.confirm(
+      "Clear all resume content? This cannot be undone. Your saved resume in this browser will be replaced with a blank resume.",
+    );
+    if (confirmed) {
+      setResumeData({
+        ...initialResumeData,
+        personalInfo: { ...initialResumeData.personalInfo },
+      });
+    }
   };
 
   const handleNext = () => {
@@ -159,9 +199,16 @@ function ResumeBuilder() {
           onColorChange={() => setShowAppearanceSettings(true)}
           onChangeTemplate={() => setShowTemplateModal(true)}
           onPreview={handleNext}
+          onDownloadPdf={handleDownloadPdf}
+          onDownloadPng={handleDownloadPng}
+          onDownloadJson={handleDownloadJson}
         />
 
-        <div className="resume-global-appearance" style={appearanceStyle}>
+        <div
+          ref={resumeRef}
+          className="resume-global-appearance"
+          style={appearanceStyle}
+        >
           <ErrorBoundary name="Resume preview">
             <SelectedTemplate
               data={resumeData}

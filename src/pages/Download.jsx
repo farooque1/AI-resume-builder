@@ -25,8 +25,6 @@ function Download() {
 
   const navigate = useNavigate();
 
-  const data = JSON.parse(localStorage.getItem("resumeData")) || {};
-
   const selectedTemplate =
     localStorage.getItem("selectedTemplate") || "ats";
   const pageMode = localStorage.getItem("resumePageMode") || "multi";
@@ -43,7 +41,7 @@ function Download() {
     templateThemes[selectedTemplate] || templateThemes.ats;
   const theme = applyAppearanceToTheme(templateTheme, appearance);
   const fileName =
-    data?.personalInfo?.name?.trim().replace(/\s+/g, "_") || "Resume";
+    resumeData?.personalInfo?.fullName?.trim().replace(/\s+/g, "_") || "Resume";
 
   // PDF Download
   const handlePrint = useReactToPrint({
@@ -77,7 +75,7 @@ function Download() {
   // JSON Download
   const handleDownloadJson = () => {
     try {
-      const jsonData = JSON.stringify(data, null, 2);
+      const jsonData = JSON.stringify(resumeData, null, 2);
       const jsonBlob = new Blob([jsonData], {
         type: "application/json;charset=utf-8",
       });
@@ -89,21 +87,21 @@ function Download() {
   // DOCX Download
   // const handleDownloadDocx = async () => {
   //   try {
-  //     const personalInfo = data?.personalInfo || {};
-  //     const experience = Array.isArray(data?.experience)
-  //       ? data.experience
+  //     const personalInfo = resumeData?.personalInfo || {};
+  //     const experience = Array.isArray(resumeData?.experience)
+  //       ? resumeData.experience
   //       : [];
-  //     const education = Array.isArray(data?.education)
-  //       ? data.education
+  //     const education = Array.isArray(resumeData?.education)
+  //       ? resumeData.education
   //       : [];
-  //     const projects = Array.isArray(data?.projects)
-  //       ? data.projects
+  //     const projects = Array.isArray(resumeData?.projects)
+  //       ? resumeData.projects
   //       : [];
-  //     const skills = Array.isArray(data?.skills)
-  //       ? data.skills
+  //     const skills = Array.isArray(resumeData?.skills)
+  //       ? resumeData.skills
   //       : [];
-  //     const languages = Array.isArray(data?.languages)
-  //       ? data.languages
+  //     const languages = Array.isArray(resumeData?.languages)
+  //       ? resumeData.languages
   //       : [];
   //     const children = [];
   //     // Name

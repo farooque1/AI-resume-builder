@@ -11,9 +11,7 @@ import { applyAppearanceToTheme } from "../utils/resumeAppearance";
 
 function Preview() {
   const navigate = useNavigate();
-  const { appearance } = useResume();
-
-  const data = JSON.parse(localStorage.getItem("resumeData")) || {};
+  const { resumeData, appearance } = useResume();
 
   const selectedTemplate = localStorage.getItem("selectedTemplate") || "ats";
   const pageMode = localStorage.getItem("resumePageMode") || "multi";
@@ -58,7 +56,7 @@ function Preview() {
           "--resume-font-scale": appearance.fontScale,
         }}
       >
-        <SelectedTemplate data={data} theme={theme} pageMode={pageMode} />
+        <SelectedTemplate data={resumeData} theme={theme} pageMode={pageMode} />
       </div>
     </>
   );
