@@ -1,3 +1,5 @@
+import * as mammoth from "mammoth/mammoth.browser.js";
+
 export function normalizeResumeText(text) {
   return text
     .replace(/\u0000/g, "")
@@ -24,7 +26,6 @@ export async function convertDocumentToText(file) {
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
     fileName.endsWith(".docx")
   ) {
-    const mammoth = await import("mammoth/mammoth.browser.js");
     const result = await mammoth.extractRawText({
       arrayBuffer: await file.arrayBuffer(),
     });
