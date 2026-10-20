@@ -2,6 +2,9 @@ import Layout from "../components/Layout";
 import { useNavigate } from "react-router-dom";
 
 import ATSFriendlyTemplate from "../templates/ATS/ATSFriendlyTemplate";
+import ModernTemplate from "../templates/Modern/ModernTemplate";
+import ProfessionalTemplate from "../templates/Professional/ProfessionalTemplate";
+import MinimalTemplate from "../templates/Minimal/MinimalTemplate";
 import { templateThemes } from "../templates/config/templateThemes";
 import { useResume } from "../context/ResumeContext";
 import { applyAppearanceToTheme } from "../utils/resumeAppearance";
@@ -10,11 +13,18 @@ function Preview() {
   const navigate = useNavigate();
   const { appearance } = useResume();
 
-  const data =
-    JSON.parse(localStorage.getItem("resumeData")) || {};
+  const data = JSON.parse(localStorage.getItem("resumeData")) || {};
 
-  const selectedTemplate =
-    localStorage.getItem("selectedTemplate") || "ats";
+  const selectedTemplate = localStorage.getItem("selectedTemplate") || "ats";
+  const pageMode = localStorage.getItem("resumePageMode") || "multi";
+  const templateMap = {
+    ats: ATSFriendlyTemplate,
+    modern: ModernTemplate,
+    professional: ProfessionalTemplate,
+    executive: ProfessionalTemplate,
+    minimal: MinimalTemplate,
+  };
+  const SelectedTemplate = templateMap[selectedTemplate] || ATSFriendlyTemplate;
 
   const templateTheme =
     JSON.parse(localStorage.getItem("selectedTheme")) ||
@@ -48,10 +58,7 @@ function Preview() {
           "--resume-font-scale": appearance.fontScale,
         }}
       >
-        <ATSFriendlyTemplate
-          data={data}
-          theme={theme}
-        />
+        <SelectedTemplate data={data} theme={theme} pageMode={pageMode} />
       </div>
     </>
   );

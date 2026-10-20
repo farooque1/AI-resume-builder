@@ -8,6 +8,7 @@ import AppearanceSettingsModal from "../components/AppearanceSettingsModal";
 import ATSFriendlyTemplate from "../templates/ATS/ATSFriendlyTemplate";
 import ModernTemplate from "../templates/Modern/ModernTemplate";
 import ProfessionalTemplate from "../templates/Professional/ProfessionalTemplate";
+import MinimalTemplate from "../templates/Minimal/MinimalTemplate";
 import { templateThemes } from "../templates/config/templateThemes";
 import { useResume } from "../context/ResumeContext";
 import {
@@ -28,10 +29,13 @@ function Download() {
 
   const selectedTemplate =
     localStorage.getItem("selectedTemplate") || "ats";
+  const pageMode = localStorage.getItem("resumePageMode") || "multi";
   const templateMap = {
     ats: ATSFriendlyTemplate,
     modern: ModernTemplate,
     professional: ProfessionalTemplate,
+    executive: ProfessionalTemplate,
+    minimal: MinimalTemplate,
   };
   const SelectedTemplate =
     templateMap[selectedTemplate] || ATSFriendlyTemplate;
@@ -488,7 +492,11 @@ function Download() {
                   "--resume-font-scale": appearance.fontScale,
                 }}
               >
-                <SelectedTemplate data={resumeData} theme={theme} />
+                <SelectedTemplate
+                  data={resumeData}
+                  theme={theme}
+                  pageMode={pageMode}
+                />
               </div>
             </div>
           </div>

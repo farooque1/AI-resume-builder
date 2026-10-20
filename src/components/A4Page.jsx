@@ -1,4 +1,4 @@
-function A4Page({ children, pageNumber, theme }) {
+function A4Page({ children, pageNumber, theme, contentStyle }) {
   return (
     <div
       className="a4-page"
@@ -7,13 +7,11 @@ function A4Page({ children, pageNumber, theme }) {
         color: theme?.primary || "#000000",
       }}
     >
-      <div className="a4-page-content">
+      <div className="a4-page-content" style={contentStyle}>
         {children}
       </div>
 
-      <div className="a4-page-number">
-        Page {pageNumber}
-      </div>
+      {/* <div className="a4-page-number">Page {pageNumber}</div> */}
     </div>
   );
 }

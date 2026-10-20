@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import ErrorBoundary from "./ErrorBoundary";
 
 function Layout() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,12 +19,8 @@ function Layout() {
       <header className="bg-white border-b shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center h-16">
-            
             {/* Logo */}
-            <Link
-              to="/"
-              className="flex items-center gap-2"
-            >
+            <Link to="/" className="flex items-center gap-2">
               <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">
                 RB
               </div>
@@ -74,8 +71,10 @@ function Layout() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto p-4 md:p-6">
-           <Outlet />
+      <main className="max-w-8xl mx-auto p-4 md:p-6">
+        <ErrorBoundary name="This page">
+          <Outlet />
+        </ErrorBoundary>
       </main>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useResume } from "../context/ResumeContext";
+import { getResumeDateInputType } from "../utils/resumeDate";
 
 function EducationForm() {
   const { resumeData, setResumeData } = useResume();
@@ -141,10 +142,19 @@ function EducationForm() {
                   </label>
 
                   <input
-                    type="month"
+                    type={getResumeDateInputType(edu.fromDate)}
                     name="fromDate"
-                    max={currentMonthStr}
+                    max={
+                      getResumeDateInputType(edu.fromDate) === "month"
+                        ? currentMonthStr
+                        : undefined
+                    }
                     value={edu.fromDate || ""}
+                    placeholder={
+                      getResumeDateInputType(edu.fromDate) === "text"
+                        ? "Date from resume"
+                        : undefined
+                    }
                     onChange={(e) =>
                       handleEducationChange(index, e)
                     }
@@ -159,11 +169,24 @@ function EducationForm() {
                   </label>
 
                   <input
-                    type="month"
+                    type={getResumeDateInputType(edu.toDate)}
                     name="toDate"
-                    min={edu.fromDate || undefined}
-                    max={currentMonthStr}
+                    min={
+                      getResumeDateInputType(edu.fromDate) === "month"
+                        ? edu.fromDate || undefined
+                        : undefined
+                    }
+                    max={
+                      getResumeDateInputType(edu.toDate) === "month"
+                        ? currentMonthStr
+                        : undefined
+                    }
                     value={edu.toDate || ""}
+                    placeholder={
+                      getResumeDateInputType(edu.toDate) === "text"
+                        ? "Date from resume"
+                        : undefined
+                    }
                     onChange={(e) =>
                       handleEducationChange(index, e)
                     }

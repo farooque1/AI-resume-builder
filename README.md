@@ -4,7 +4,7 @@ A browser-based resume builder built with React, Vite, and Tailwind CSS. Users c
 
 ## Getting started
 
-Requirements: Node.js and npm.
+Requirements: Node.js 20 or newer and npm.
 
 ```bash
 npm install
@@ -13,25 +13,45 @@ npm run dev
 
 Vite prints the local development URL when the server starts.
 
+The frontend and API are separate sibling projects. Start the API separately by following `../cv-backend/README.md`; the Vite dev server listens on all local network interfaces and proxies `/api` requests to `http://127.0.0.1:3001`.
+
+When both servers are running, use the LAN URL printed in the Vite terminal to open the frontend on another device connected to the same network. The backend also prints its LAN URL. Allow inbound TCP port `5173` through the development computer's firewall if prompted. Keep the computer and test devices on a trusted network.
+
+Run the frontend and backend in separate terminals:
+
+```powershell
+# Terminal 1: frontend (this folder)
+npm install
+npm run dev
+
+# Terminal 2: backend (sibling folder)
+Set-Location ..\cv-backend
+npm install
+Copy-Item .env.example .env
+npm run dev
+```
+
+Set the provider API key and model in the backend `.env` before testing document extraction. To change the frontend listen address use `VITE_HOST`; to proxy to a different local API address, set `VITE_API_PROXY_TARGET` in the frontend environment (for example, `http://127.0.0.1:3001`).
+
 Useful scripts:
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start the Vite development server |
-| `npm run build` | Run the TypeScript project build and create the production bundle |
-| `npm run lint` | Run ESLint |
-| `npm run preview` | Serve the built bundle locally |
+| Command           | Purpose                                                           |
+| ----------------- | ----------------------------------------------------------------- |
+| `npm run dev`     | Start the Vite development server                                 |
+| `npm run build`   | Run the TypeScript project build and create the production bundle |
+| `npm run lint`    | Run ESLint                                                        |
+| `npm run preview` | Serve the built bundle locally                                    |
 
 ## User workflow
 
 1. **Start a resume** from the home page using **Create Resume**.
 2. **Choose an input method** on `/ResumeOptions`:
    - **Create manually** starts with the resume form.
-   - **Upload Resume** extracts text from a PDF in the browser and maps recognized content into resume fields. PDF parsing is heuristic, so review and correct the imported fields.
+   - **Upload Resume** extracts text from a PDF or DOCX in the browser, sends the text to the backend AI service, and maps the validated result into resume fields. Review the imported content for accuracy.
    - **Import JSON** loads a previously exported resume-data JSON file. A sample JSON file can be downloaded from this screen.
-3. **Select a template** on `/templates` when that step is part of the chosen flow. Available templates are ATS Friendly, Modern, and Professional.
+3. **Select a template** on `/templates` when that step is part of the chosen flow. Choose from ATS Friendly, Modern, Professional, Minimal, and Executive designs, filter by category, and select one-page or multi-page output.
 4. **Edit and preview** on `/builder`. Edit personal information, summary, skills, experience, education, projects, certifications, awards, and languages. Toggle optional sections and use the live preview.
-5. **Customize the resume** with the toolbar. Typography opens global body/heading font and font-size settings; Change Color opens the global color controls. Appearance settings are stored in browser local storage.
+5. **Customize the resume** with the toolbar. Choose one-page or multi-page output, change templates, and adjust global body/heading fonts, font size, and colors. Appearance settings are stored in browser local storage.
 6. **Preview and export** from `/preview` or `/download`. The download screen supports printing/saving as PDF, exporting PNG, and exporting resume data as JSON.
 
 ## Application workflow
@@ -65,9 +85,12 @@ flowchart LR
     Theme --> Templates
     Templates --> Preview["Builder live preview"]
     Templates --> Export["Print/PDF, PNG, JSON"]
-    PDF["Uploaded PDF"] --> PDFText["pdf.js text extraction"]
-    PDFText --> Parser["Resume text parser"]
-    Parser --> Context
+    PDF["Uploaded PDF or DOCX"] --> PDFText["Browser text extraction"]
+    PDFText --> API["Sibling Node API"]
+    API --> Validate["Validate text and limits"]
+    Validate --> AI["OpenAI-compatible AI API"]
+    AI --> Schema["Validate standardized resume JSON"]
+    Schema --> Context
     JSON["Imported JSON"] --> Context
 ```
 
@@ -79,7 +102,7 @@ flowchart LR
 - **Resume rendering:** `src/templates/` contains the ATS, Modern, and Professional layouts and their reusable content sections. The ATS layout uses `src/components/PaginatedResume.jsx` to split the two-column resume into preview pages and show page breaks.
 - **Preview route note:** The `/preview` page currently renders the ATS template. The builder and download screens use the selected template.
 - **Appearance:** `src/components/AppearanceSettingsModal.jsx` edits global fonts, font scale, and colors. `src/utils/resumeAppearance.js` applies the selected color overrides to each template's theme.
-- **PDF import:** `src/utils/extractPdfText.js` uses pdf.js to read PDF text in the browser. `src/utils/parseResumeText.js` uses text patterns and section headings to populate resume fields; it is not an AI/cloud parsing service.
+- **Document import:** `src/utils/convertDocumentToText.js` extracts PDF text with pdf.js and DOCX text with Mammoth in the browser. The text is posted to the sibling Node API, which calls the configured AI provider and validates its output against the resume data schema. Legacy `.doc` files are not supported; convert them to `.docx` first.
 - **Export:** `src/pages/Download.jsx` uses `react-to-print` for PDF/print, `html-to-image` for PNG, and `file-saver` for JSON.
 
 There is no server database or cross-device sync. Resume edits are written to browser local storage, but the current app starts resume state from its initial data instead of restoring `resumeData` on reload. Export resume data as JSON to keep a copy or move it between browsers; appearance settings are restored from browser storage.
@@ -95,5 +118,8 @@ src/
   pages/        Home, options, builder, preview, and download screens
   routes/       React Router configuration
   templates/    Resume layouts, sections, themes, and template options
-  utils/        PDF extraction, text parsing, export helpers, appearance
+  utils/        Document text extraction, export helpers, appearance
+../cv-backend/  Separate Node.js API project
+  src/          API config, routes, schemas, services, and utilities
+  test/         Node built-in API tests
 ```

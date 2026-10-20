@@ -2,12 +2,20 @@ import { Fragment, useLayoutEffect, useRef, useState } from "react";
 import A4Page from "./A4Page";
 
 const PAGE_HEIGHT = 1122;
-const PAGE_VERTICAL_PADDING = 91;
+const PAGE_VERTICAL_PADDING = 45;
 const PAGE_CONTENT_HEIGHT = PAGE_HEIGHT - PAGE_VERTICAL_PADDING * 2;
 
-function PaginatedResume({ header, leftColumn, rightColumn, theme }) {
+function PaginatedResume({
+  header,
+  leftColumn,
+  rightColumn,
+  theme,
+  pageMode = "multi",
+  singleColumn = false,
+}) {
   const measureRef = useRef(null);
   const [pages, setPages] = useState([]);
+  const [pageScale, setPageScale] = useState(1);
 
   useLayoutEffect(() => {
     const container = measureRef.current;
@@ -15,11 +23,30 @@ function PaginatedResume({ header, leftColumn, rightColumn, theme }) {
 
     const measurePages = () => {
       const headerHeight =
-        container.querySelector("[data-measure-header]")?.getBoundingClientRect().height ?? 0;
+        container
+          .querySelector("[data-measure-header]")
+          ?.getBoundingClientRect().height ?? 0;
       const columns = ["left", "right"].map((side) => {
-        const column = container.querySelector(`[data-measure-column="${side}"]`);
+        const column = container.querySelector(
+          `[data-measure-column="${side}"]`,
+        );
         return column ? Array.from(column.children) : [];
       });
+      const columnHeights = columns.map((items) =>
+        items.reduce(
+          (total, item) => total + item.getBoundingClientRect().height,
+          0,
+        ),
+      );
+      const totalHeight = headerHeight + Math.max(0, ...columnHeights);
+      const nextScale =
+        pageMode === "single"
+          ? Math.min(1, PAGE_CONTENT_HEIGHT / Math.max(totalHeight, 1))
+          : 1;
+
+      setPageScale((previousScale) =>
+        Math.abs(previousScale - nextScale) < 0.001 ? previousScale : nextScale,
+      );
 
       // Fill each side independently so content can continue in its own column.
       const splitColumn = (items) => {
@@ -32,7 +59,11 @@ function PaginatedResume({ header, leftColumn, rightColumn, theme }) {
           const height = item.getBoundingClientRect().height;
           if (height === 0) return;
 
-          if (currentHeight + height > availableHeight && currentPage.length) {
+          if (
+            pageMode !== "single" &&
+            currentHeight + height > availableHeight &&
+            currentPage.length
+          ) {
             splitPages.push(currentPage);
             currentPage = [];
             currentHeight = 0;
@@ -48,7 +79,10 @@ function PaginatedResume({ header, leftColumn, rightColumn, theme }) {
       };
 
       const splitColumns = columns.map(splitColumn);
-      const pageCount = Math.max(1, ...splitColumns.map((column) => column.length));
+      const pageCount = Math.max(
+        1,
+        ...splitColumns.map((column) => column.length),
+      );
       const nextPages = Array.from({ length: pageCount }, (_, index) => ({
         left: splitColumns[0][index] || [],
         right: splitColumns[1][index] || [],
@@ -57,16 +91,15 @@ function PaginatedResume({ header, leftColumn, rightColumn, theme }) {
       setPages((previousPages) => {
         const isUnchanged =
           previousPages.length === nextPages.length &&
-          previousPages.every(
-            (page, index) =>
-              ["left", "right"].every(
-                (side) =>
-                  page[side].length === nextPages[index][side].length &&
-                  page[side].every(
-                    (itemIndex, itemPosition) =>
-                      itemIndex === nextPages[index][side][itemPosition]
-                  )
-              )
+          previousPages.every((page, index) =>
+            ["left", "right"].every(
+              (side) =>
+                page[side].length === nextPages[index][side].length &&
+                page[side].every(
+                  (itemIndex, itemPosition) =>
+                    itemIndex === nextPages[index][side][itemPosition],
+                ),
+            ),
           );
 
         return isUnchanged ? previousPages : nextPages;
@@ -75,17 +108,19 @@ function PaginatedResume({ header, leftColumn, rightColumn, theme }) {
 
     measurePages();
     const observer = new ResizeObserver(measurePages);
-    container.querySelectorAll("[data-measure-header], [data-item-index]").forEach((element) => {
-      observer.observe(element);
-    });
+    container
+      .querySelectorAll("[data-measure-header], [data-item-index]")
+      .forEach((element) => {
+        observer.observe(element);
+      });
 
     return () => observer.disconnect();
   }, [header, leftColumn, rightColumn]);
 
   const columns = [leftColumn, rightColumn].map((items) =>
     (Array.isArray(items) ? items : [items]).filter(
-      (item) => item !== null && item !== undefined && item !== false
-    )
+      (item) => item !== null && item !== undefined && item !== false,
+    ),
   );
 
   return (
@@ -93,6 +128,7 @@ function PaginatedResume({ header, leftColumn, rightColumn, theme }) {
       <div
         ref={measureRef}
         aria-hidden="true"
+        className="resume-measurement"
         style={{
           width: "180mm",
           position: "absolute",
@@ -103,7 +139,9 @@ function PaginatedResume({ header, leftColumn, rightColumn, theme }) {
         <div data-measure-header className="resume-page-item">
           {header}
         </div>
-        <div className="grid grid-cols-2 gap-8">
+        <div
+          className={`grid ${singleColumn ? "grid-cols-1" : "grid-cols-2 gap-8"}`}
+        >
           {columns.map((items, columnIndex) => (
             <div
               key={columnIndex}
@@ -128,13 +166,32 @@ function PaginatedResume({ header, leftColumn, rightColumn, theme }) {
         {pages.map((page, pageIndex) => (
           <Fragment key={pageIndex}>
             {pageIndex > 0 && (
-              <div className="page-break-divider" role="separator" aria-label="Page break">
+              <div
+                className="page-break-divider"
+                role="separator"
+                aria-label="Page break"
+              >
                 <span>Page break</span>
               </div>
             )}
-            <A4Page pageNumber={pageIndex + 1} theme={theme}>
-              {pageIndex === 0 && <div className="resume-page-item">{header}</div>}
-              <div className="grid grid-cols-2 gap-8">
+            <A4Page
+              pageNumber={pageIndex + 1}
+              theme={theme}
+              contentStyle={
+                pageMode === "single"
+                  ? {
+                      transform: `scale(${pageScale})`,
+                      transformOrigin: "top center",
+                    }
+                  : undefined
+              }
+            >
+              {pageIndex === 0 && (
+                <div className="resume-page-item">{header}</div>
+              )}
+              <div
+                className={`grid ${singleColumn ? "grid-cols-1" : "grid-cols-2 gap-8"}`}
+              >
                 {["left", "right"].map((side, columnIndex) => (
                   <div key={side} className="min-w-0">
                     {page[side].map((itemIndex) => (

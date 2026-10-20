@@ -102,6 +102,46 @@ const TemplatePreview = ({ type }) => {
           </div>
         </div>
       )}
+
+      {type === "minimal" && (
+        <div className="h-full bg-white shadow-sm p-4">
+          <div className="h-3 bg-gray-800 w-2/3 mb-2" />
+          <div className="h-1.5 bg-gray-300 w-1/2 mb-4" />
+          <div className="border-t border-gray-300 mb-4" />
+          {[0, 1, 2].map((section) => (
+            <div key={section} className="mb-4">
+              <div className="h-2 bg-gray-700 w-1/4 mb-2" />
+              <div className="space-y-1.5">
+                <div className="h-1 bg-gray-300 w-full" />
+                <div className="h-1 bg-gray-300 w-11/12" />
+                <div className="h-1 bg-gray-300 w-4/5" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {type === "executive" && (
+        <div className="h-full bg-white shadow-sm">
+          <div className="bg-[#18324B] p-4">
+            <div className="h-3 bg-white w-1/2 mb-2" />
+            <div className="h-1.5 bg-slate-300 w-1/3" />
+          </div>
+          <div className="p-4">
+            <div className="h-2 bg-[#B38A45] w-1/4 mb-3" />
+            <div className="space-y-2">
+              <div className="h-1.5 bg-gray-300 w-full" />
+              <div className="h-1.5 bg-gray-300 w-11/12" />
+              <div className="h-1.5 bg-gray-300 w-4/5" />
+            </div>
+            <div className="h-2 bg-[#18324B] w-1/3 mt-5 mb-3" />
+            <div className="space-y-2">
+              <div className="h-1.5 bg-gray-300 w-full" />
+              <div className="h-1.5 bg-gray-300 w-5/6" />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

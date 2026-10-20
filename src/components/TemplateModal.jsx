@@ -37,9 +37,7 @@ const TemplateModal = ({
         {/* Header */}
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">
-              Change Template
-            </h2>
+            <h2 className="text-xl font-bold text-gray-900">Change Template</h2>
 
             <p className="text-sm text-gray-500 mt-1">
               Select a template to instantly update your resume.
@@ -69,8 +67,7 @@ const TemplateModal = ({
         {/* Templates */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {templates.map((template) => {
-            const isSelected =
-              selectedTemplate === template.id;
+            const isSelected = selectedTemplate === template.id;
 
             return (
               <button
@@ -134,6 +131,20 @@ const TemplateModal = ({
                   <p className="text-xs text-gray-500 mt-2 leading-relaxed">
                     {template.description}
                   </p>
+
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-700">
+                      {template.category}
+                    </span>
+                    {template.tags?.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded border border-gray-200 px-2 py-0.5 text-[11px] text-gray-600"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </button>
             );

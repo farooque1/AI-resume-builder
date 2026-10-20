@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 /* ================================
    GLOBAL
 ================================ */
@@ -15,7 +14,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
 /* ================================
    RESUME PREVIEW AREA
 ================================ */
@@ -24,13 +22,12 @@ body {
   width: 100%;
   min-height: 100vh;
 
-  padding: 32px 16px;
+  padding: 15px 16px;
 
   background-color: #f3f4f6;
 
   box-sizing: border-box;
 }
-
 
 /* ================================
    PAGINATED RESUME
@@ -44,15 +41,14 @@ body {
   width: 100%;
 }
 
-
 /* ================================
    A4 PAGE
 ================================ */
 
 .a4-page {
   width: 210mm;
+  height: 297mm;
   min-height: 297mm;
-
   padding: 12mm 15mm;
   margin: 0 auto;
 
@@ -146,11 +142,22 @@ body {
   overflow: visible;
 }
 
+.resume-single-page-fit {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.resume-single-page-content {
+  width: 100%;
+  transform: scale(var(--resume-page-scale, 1));
+  transform-origin: top center;
+}
+
 .resume-page-item {
   display: flow-root;
   width: 100%;
 }
-
 
 /* Content area inside A4 */
 
@@ -162,7 +169,6 @@ body {
 
   box-sizing: border-box;
 } */
-
 
 /* Page number */
 
@@ -181,7 +187,6 @@ body {
 
   color: #6b7280;
 } */
-
 
 /* ================================
    MEASUREMENT CONTAINER
@@ -216,7 +221,6 @@ body {
   box-sizing: border-box;
 } */
 
-
 /* ================================
    PRINT / PDF
 ================================ */
@@ -226,9 +230,7 @@ body {
   margin: 0;
 }
 
-
 @media print {
-
   html,
   body {
     margin: 0 !important;
@@ -236,7 +238,6 @@ body {
 
     background-color: white !important;
   }
-
 
   button {
     display: none !important;
@@ -246,45 +247,30 @@ body {
     display: none !important;
   }
 
-
-  /* .resume-preview-container {
+  .resume-preview-container {
     width: 210mm;
-
     min-height: auto;
-
-    margin: 0;
-    padding: 0;
-
-    background-color: white;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
-
-  .paginated-resume {
-    margin: 0;
-    padding: 0;
-  } */
-
-
-  /* .a4-page {
+  .a4-page {
     width: 210mm;
     height: 297mm;
-
+    min-height: 297mm;
     margin: 0;
-
     box-shadow: none;
-
     break-after: page;
     page-break-after: always;
   }
 
-
-  .a4-page:last-child {
+  .a4-page:last-of-type {
     break-after: auto;
     page-break-after: auto;
-  } */
-
-
-  /* We don't want measurement DOM in PDF */
+  }
 
   .resume-measurement {
     display: none !important;

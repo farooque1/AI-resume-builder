@@ -1,31 +1,29 @@
-function LanguagesSection({
-  data,
-  theme,
-}) {
-  const languages =
-    data?.languages || [];
+import PreviewEditButton from "../../../components/PreviewEditButton";
 
-  const validLanguages =
-    languages.filter(
-      (item) =>
-        item.language ||
-        item.proficiency
-    );
+function LanguagesSection({ data, theme, onEditSection }) {
+  const languages = data?.languages || [];
 
-  if (validLanguages.length === 0)
-    return null;
+  const validLanguages = languages.filter(
+    (item) => item.language || item.proficiency,
+  );
+
+  if (validLanguages.length === 0 && !onEditSection) return null;
 
   return (
     <section className="mt-4">
-      <h2
-        className="text-[16px] font-bold uppercase tracking-wide pb-1 mb-2"
-        style={{
-          color: theme.primary,
-          borderBottom: `1px solid black`,
-        }}
-      >
-        Languages
-      </h2>
+      <div className="mb-2 flex items-center justify-between gap-2 border-b border-black pb-1">
+        <h2
+          className="text-[16px] font-bold uppercase tracking-wide"
+          style={{ color: theme.primary }}
+        >
+          Languages
+        </h2>
+        <PreviewEditButton
+          section="languages"
+          label="Languages"
+          onEditSection={onEditSection}
+        />
+      </div>
 
       <ul className="flex justify-start gap-2">
         {validLanguages.map((item, index) => (
@@ -36,7 +34,9 @@ function LanguagesSection({
               color: theme.secondary,
             }}
           >
-            {item.language}
+            {item.proficiency
+              ? `${item.language} (${item.proficiency})`
+              : item.language}
           </li>
         ))}
       </ul>

@@ -11,19 +11,23 @@ import LanguagesSection from "../component/sections/LanguagesSection";
 import { templateThemes } from "../../templates/config/templateThemes";
 import PaginatedResume from "../../components/PaginatedResume";
 
-function ATSFriendlyTemplate({ data, theme }) {
+function ATSFriendlyTemplate({
+  data,
+  theme,
+  pageMode = "multi",
+  onEditSection,
+}) {
   const currentTheme = theme || templateThemes.ats;
 
-  const visibleSections =
-    data?.visibleSections || [
-      "experience",
-      "education",
-      "skills",
-      "projects",
-      "certifications",
-      "languages",
-      "awards",
-    ];
+  const visibleSections = data?.visibleSections || [
+    "experience",
+    "education",
+    "skills",
+    "projects",
+    "certifications",
+    "languages",
+    "awards",
+  ];
 
   const isSectionVisible = (id) => {
     return visibleSections.includes(id);
@@ -33,10 +37,19 @@ function ATSFriendlyTemplate({ data, theme }) {
     <div className="resume-preview-container">
       <PaginatedResume
         theme={currentTheme}
+        pageMode={pageMode}
         header={
           <>
-            <Header data={data} theme={currentTheme} />
-            <ContactInfo data={data} theme={currentTheme} />
+            <Header
+              data={data}
+              theme={currentTheme}
+              onEditSection={onEditSection}
+            />
+            <ContactInfo
+              data={data}
+              theme={currentTheme}
+              onEditSection={onEditSection}
+            />
           </>
         }
         leftColumn={[
@@ -49,6 +62,7 @@ function ATSFriendlyTemplate({ data, theme }) {
                     theme={currentTheme}
                     experienceItems={[experience]}
                     showHeading={index === 0}
+                    onEditSection={onEditSection}
                   />
                 ))
               : [
@@ -57,22 +71,51 @@ function ATSFriendlyTemplate({ data, theme }) {
                     data={data}
                     theme={currentTheme}
                     experienceItems={[]}
+                    onEditSection={onEditSection}
                   />,
                 ]
             : []),
           ...(isSectionVisible("education")
-            ? [<EducationSection key="education" data={data} theme={currentTheme} />]
+            ? [
+                <EducationSection
+                  key="education"
+                  data={data}
+                  theme={currentTheme}
+                  onEditSection={onEditSection}
+                />,
+              ]
             : []),
           ...(isSectionVisible("certifications")
-            ? [<CertificationsSection key="certifications" data={data} theme={currentTheme} />]
+            ? [
+                <CertificationsSection
+                  key="certifications"
+                  data={data}
+                  theme={currentTheme}
+                  onEditSection={onEditSection}
+                />,
+              ]
             : []),
           ...(isSectionVisible("languages")
-            ? [<LanguagesSection key="languages" data={data} theme={currentTheme} />]
+            ? [
+                <LanguagesSection
+                  key="languages"
+                  data={data}
+                  theme={currentTheme}
+                  onEditSection={onEditSection}
+                />,
+              ]
             : []),
         ]}
         rightColumn={[
           ...(isSectionVisible("skills")
-            ? [<SkillsSection key="skills" data={data} theme={currentTheme} />]
+            ? [
+                <SkillsSection
+                  key="skills"
+                  data={data}
+                  theme={currentTheme}
+                  onEditSection={onEditSection}
+                />,
+              ]
             : []),
           ...(isSectionVisible("projects")
             ? data.projects?.length
@@ -83,12 +126,28 @@ function ATSFriendlyTemplate({ data, theme }) {
                     theme={currentTheme}
                     projectItems={[project]}
                     showHeading={index === 0}
+                    onEditSection={onEditSection}
                   />
                 ))
-              : [<ProjectsSection key="projects" data={data} theme={currentTheme} projectItems={[]} />]
+              : [
+                  <ProjectsSection
+                    key="projects"
+                    data={data}
+                    theme={currentTheme}
+                    projectItems={[]}
+                    onEditSection={onEditSection}
+                  />,
+                ]
             : []),
           ...(isSectionVisible("awards")
-            ? [<AwardsSection key="awards" data={data} theme={currentTheme} />]
+            ? [
+                <AwardsSection
+                  key="awards"
+                  data={data}
+                  theme={currentTheme}
+                  onEditSection={onEditSection}
+                />,
+              ]
             : []),
         ]}
       />

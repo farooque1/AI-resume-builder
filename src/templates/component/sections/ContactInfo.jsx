@@ -6,68 +6,53 @@ import {
   FaGlobe,
   FaLinkedin,
 } from "react-icons/fa";
+import PreviewEditButton from "../../../components/PreviewEditButton";
 
-function ContactInfo({ data, theme }) {
+function ContactInfo({ data, theme, onEditSection }) {
+  const contactColumns = [
+    [
+      { Icon: FaEnvelope, value: data?.personalInfo?.email },
+      { Icon: FaMapMarkerAlt, value: data?.personalInfo?.location },
+      { Icon: FaGithub, value: data?.personalInfo?.github },
+    ],
+    [
+      { Icon: FaPhoneAlt, value: data?.personalInfo?.phone },
+      { Icon: FaGlobe, value: data?.personalInfo?.portfolio },
+      { Icon: FaLinkedin, value: data?.personalInfo?.linkedin },
+    ],
+  ];
 
   return (
     <div
-      className="grid grid-cols-2 gap-4 py-4 text-xs"
+      className="grid grid-cols-2 gap-4 py-2 text-sm"
       style={{
-        borderBottom: '1px solid black',
-        borderTop: '1px solid black',
+        borderBottom: "1px solid black",
+        borderTop: "1px solid black",
         color: theme.secondary,
       }}
     >
-      <div className="space-y-2">
-        <p className="flex items-center gap-2">
-          <FaEnvelope
-            style={{ color: theme.accent }}
-          />
-          {data?.personalInfo?.email ||
-            "farooque.shaikh@gmail.com"}
-        </p>
-
-        <p className="flex items-center gap-2">
-          <FaMapMarkerAlt
-            style={{ color: theme.accent }}
-          />
-          {data?.personalInfo?.location ||
-            "MH, Mumbai"}
-        </p>
-
-        <p className="flex items-center gap-2 break-all">
-          <FaGithub
-            style={{ color: theme.accent }}
-          />
-          {data?.personalInfo?.github ||
-            "github.com/farooque1"}
-        </p>
-      </div>
-
-      <div className="space-y-2">
-        <p className="flex items-center gap-2">
-          <FaPhoneAlt
-            style={{ color: theme.accent }}
-          />
-          {data?.personalInfo?.phone ||
-            "+91 9876543210"}
-        </p>
-
-        <p className="flex items-center gap-2 break-all">
-          <FaGlobe
-            style={{ color: theme.accent }}
-          />
-          {data?.personalInfo?.portfolio ||
-            "www.farooque.dev"}
-        </p>
-          <p className="flex items-center gap-2 break-all">
-          <FaLinkedin
-            style={{ color: theme.accent }}
-          />
-          {data?.personalInfo?.linkedin ||
-            "www.farooque.dev"}
-        </p>
-      </div>
+      {/* <div className="col-span-2 flex justify-end">
+        <PreviewEditButton
+          section="contactInfo"
+          label="Contact Information"
+          onEditSection={onEditSection}
+        />
+      </div> */}
+      {contactColumns.map((contacts, columnIndex) => (
+        <div className="space-y-1" key={columnIndex}>
+          {contacts.map(({ Icon, value }, contactIndex) =>
+            value ? (
+              <p
+                className="flex items-center gap-2 break-all"
+                key={contactIndex}
+              >
+                <Icon style={{ color: theme.accent }} />
+                {value}
+              </p>
+            ) : null,
+          )}
+        </div>
+      ))}
     </div>
   );
 }

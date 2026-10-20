@@ -1,4 +1,6 @@
-function SkillsSection({ data, theme }) {
+import PreviewEditButton from "../../../components/PreviewEditButton";
+
+function SkillsSection({ data, theme, onEditSection }) {
   const fallbackSkills = [
     "React.js",
     "Next.js",
@@ -21,38 +23,43 @@ function SkillsSection({ data, theme }) {
 
   const skills = Array.from(
     new Set(
-      (
-        Array.isArray(rawSkills)
-          ? rawSkills
-          : typeof rawSkills === "string"
+      (Array.isArray(rawSkills)
+        ? rawSkills
+        : typeof rawSkills === "string"
           ? rawSkills.split(",")
           : []
       )
         .map((skill) => skill?.trim())
-        .filter(Boolean)
-    )
+        .filter(Boolean),
+    ),
   );
 
-  const displaySkills =
-    skills.length > 0 ? skills : fallbackSkills;
+  const displaySkills = skills.length > 0 ? skills : fallbackSkills;
 
   return (
     <section className="avoid-break">
-      <h2
-        className="text-[18px] font-bold uppercase tracking-wide"
-        style={{
-          color: theme.primary,
-          borderBottom: `2px solid ${theme.border}`,
-        }}
+      <div
+        className="mt-1 flex items-center justify-between gap-2 border-b-1"
+        style={{ borderColor: theme.border }}
       >
-        Skills
-      </h2>
+        <h2
+          className="text-[18px] font-bold uppercase tracking-wide"
+          style={{ color: theme.primary }}
+        >
+          Skills
+        </h2>
+        <PreviewEditButton
+          section="skills"
+          label="Skills"
+          onEditSection={onEditSection}
+        />
+      </div>
 
-      <div className="flex flex-wrap gap-1 mb-3">
+      <div className="flex flex-wrap gap-1 my-2">
         {displaySkills.map((skill, index) => (
           <span
             key={index}
-            className="px-2 py-1 rounded text-[12px] font-medium"
+            className="px-2 py-[2px] rounded text-[12px] font-medium"
             style={{
               backgroundColor: "#374151",
               color: "#FFFFFF",

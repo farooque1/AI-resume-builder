@@ -1,4 +1,5 @@
 import { useResume } from "../context/ResumeContext";
+import { getResumeDateInputType } from "../utils/resumeDate";
 
 function ExperienceForm() {
   const { resumeData, setResumeData } = useResume();
@@ -132,10 +133,19 @@ function ExperienceForm() {
                     </label>
 
                     <input
-                      type="month"
+                      type={getResumeDateInputType(exp.fromDate)}
                       name="fromDate"
-                      max={currentMonthStr}
+                      max={
+                        getResumeDateInputType(exp.fromDate) === "month"
+                          ? currentMonthStr
+                          : undefined
+                      }
                       value={exp.fromDate || ""}
+                      placeholder={
+                        getResumeDateInputType(exp.fromDate) === "text"
+                          ? "Date from resume"
+                          : undefined
+                      }
                       onChange={(e) =>
                         handleExperienceChange(index, e)
                       }
@@ -165,11 +175,24 @@ function ExperienceForm() {
                       </label>
 
                       <input
-                        type="month"
+                        type={getResumeDateInputType(exp.toDate)}
                         name="toDate"
-                        min={exp.fromDate || undefined}
-                        max={currentMonthStr}
+                        min={
+                          getResumeDateInputType(exp.fromDate) === "month"
+                            ? exp.fromDate || undefined
+                            : undefined
+                        }
+                        max={
+                          getResumeDateInputType(exp.toDate) === "month"
+                            ? currentMonthStr
+                            : undefined
+                        }
                         value={exp.toDate || ""}
+                        placeholder={
+                          getResumeDateInputType(exp.toDate) === "text"
+                            ? "Date from resume"
+                            : undefined
+                        }
                         onChange={(e) =>
                           handleExperienceChange(index, e)
                         }

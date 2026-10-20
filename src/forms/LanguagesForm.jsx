@@ -26,6 +26,7 @@ function LanguagesForm() {
   const addLanguage = () => {
     const newLanguage = {
       language: "",
+      proficiency: "",
     };
 
     setResumeData((prev) => ({
@@ -99,6 +100,17 @@ function LanguagesForm() {
               name="language"
               placeholder="Language e.g. English"
               value={languageItem.language || ""}
+              onChange={(e) =>
+                handleLanguageChange(index, e)
+              }
+              className="w-full border p-2 rounded"
+            />
+
+            <input
+              type="text"
+              name="proficiency"
+              placeholder="Proficiency e.g. Native, Fluent, Conversational"
+              value={languageItem.proficiency || ""}
               onChange={(e) =>
                 handleLanguageChange(index, e)
               }

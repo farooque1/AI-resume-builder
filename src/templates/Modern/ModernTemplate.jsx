@@ -7,14 +7,11 @@ import ProjectsSection from "../component/sections/ProjectSection";
 import CertificationsSection from "../component/sections/CertificationsSection";
 import AwardsSection from "../component/sections/AwardsSection";
 import LanguagesSection from "../component/sections/LanguagesSection";
+import SinglePageFit from "../../components/SinglePageFit";
 
-function ModernTemplate({
-  data,
-  theme,
-}) {
-  return (
+function ModernTemplate({ data, theme, pageMode = "multi", onEditSection }) {
+  const content = (
     <div className="bg-white max-w-[850px] mx-auto flex shadow-lg">
-
       {/* Left Sidebar */}
       <div
         className="w-[30%] text-white p-6"
@@ -29,21 +26,25 @@ function ModernTemplate({
         <SkillsSection
           data={data}
           theme={theme}
+          onEditSection={onEditSection}
         />
 
         <LanguagesSection
           data={data}
           theme={theme}
+          onEditSection={onEditSection}
         />
 
         <AwardsSection
           data={data}
           theme={theme}
+          onEditSection={onEditSection}
         />
 
         <CertificationsSection
           data={data}
           theme={theme}
+          onEditSection={onEditSection}
         />
       </div>
 
@@ -51,36 +52,38 @@ function ModernTemplate({
       <div
         className="w-[70%] p-6"
         style={{
-          backgroundColor:
-            theme?.background,
+          backgroundColor: theme?.background,
         }}
       >
-        <Header
-          data={data}
-          theme={theme}
-        />
+        <Header data={data} theme={theme} onEditSection={onEditSection} />
 
-        <ContactInfo
-          data={data}
-          theme={theme}
-        />
+        <ContactInfo data={data} theme={theme} onEditSection={onEditSection} />
 
         <ExperienceSection
           data={data}
           theme={theme}
+          onEditSection={onEditSection}
         />
 
         <ProjectsSection
           data={data}
           theme={theme}
+          onEditSection={onEditSection}
         />
 
         <EducationSection
           data={data}
           theme={theme}
+          onEditSection={onEditSection}
         />
       </div>
     </div>
+  );
+
+  return pageMode === "single" ? (
+    <SinglePageFit theme={theme}>{content}</SinglePageFit>
+  ) : (
+    content
   );
 }
 

@@ -62,6 +62,7 @@ export const initialResumeData = {
   languages: [
     {
       language: "",
+      proficiency: "",
     },
   ],
 
